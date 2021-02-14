@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  proxy:
+    volumes:
+      - ./proxy/nginx-dev.conf:/etc/nginx/nginx.conf
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: npm run start
+    volumes:
+      - ./frontend/src:/app/src
+    ports:
+      - '3000:3000'
+    # stdin_open: true
+    # tty: true
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    volumes:
+      - ./server/src:/app/src
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '3001:3001'
+    depends_on:
+      - db-test
+    stdin_open: true
+    tty: true
+
+  postgresql:
+    ports:
+      - '5432:5432'
+
+  redis:
+    ports:
+      - '6379:6379'
+
+  db-test:
+    image: postgres:13.1-alpine
+    container_name: stakenet-explorer-db-test
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    volumes:
+      - database-test-data:/var/lib/postgresql/data/
+    networks:
+      - backend-network
+
+volumes:
+  database-test-data:
