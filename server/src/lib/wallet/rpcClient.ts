@@ -3,6 +3,8 @@ import { Tx } from '../../resources/tx/tx.interface';
 import { Block } from '../../resources/blocks/block.interface';
 
 interface IRpcClient {
+  ping(): Promise<Record<string, string | null>>;
+  getBlockCount(): Promise<number>;
   getBlockHash(height: string): Promise<string>;
   getBlockByHash(hash: string): Promise<Block>;
   getRawTransaction(txId: string): Promise<Tx>;
@@ -37,6 +39,11 @@ export class RpcClient implements IRpcClient {
 
   public async ping(): Promise<Record<string, string | null>> {
     return await this.getData('ping');
+  }
+
+  public async getBlockCount(): Promise<number> {
+    const { result } = await this.getData('getblockcount');
+    return Number(result);
   }
 
   public async getBlockHash(height: string): Promise<string> {

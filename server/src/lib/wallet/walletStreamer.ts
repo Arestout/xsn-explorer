@@ -4,7 +4,9 @@ import { RpcClient } from './rpcClient';
 
 export class WalletStreamer {
   private blockHeight: number;
+  private blockHeightWallet: number;
   private blockController = new BlockController();
+  private timeout: number;
   private rpcClient = new RpcClient('http://user:password@wallet:8332');
 
   public async start(): Promise<void> {
@@ -14,13 +16,16 @@ export class WalletStreamer {
   }
 
   private async streamData(height: number): Promise<void> {
+    this.compareHeights();
+    this.blockHeight += 1;
+
     try {
       await this.blockController.createBlock(String(height));
-      this.blockHeight += 1;
-      setTimeout(async () => await this.streamData(this.blockHeight), 1000);
     } catch (error) {
-      setTimeout(async () => await this.streamData(this.blockHeight), 5000);
+      this.blockHeight -= 1;
     }
+
+    setTimeout(async () => await this.streamData(this.blockHeight), this.timeout);
   }
 
   private async pingWallet(): Promise<void> {
@@ -36,11 +41,20 @@ export class WalletStreamer {
 
   private async getLatestBlockHeight(): Promise<void> {
     try {
-      const blockHeight = await this.blockController.getLatestBlockHeight();
-      console.log({ blockHeight });
-      this.blockHeight = blockHeight;
+      const blockHeightDb: number = await this.blockController.getLatestBlockHeight();
+      this.blockHeightWallet = await this.rpcClient.getBlockCount();
+
+      this.blockHeight = blockHeightDb;
     } catch (error) {
       this.blockHeight = 0; // TODO
+    }
+
+    this.timeout = 0;
+  }
+
+  private async compareHeights(): Promise<void> {
+    if (this.blockHeight == this.blockHeightWallet) {
+      this.timeout = 1000;
     }
   }
 }
