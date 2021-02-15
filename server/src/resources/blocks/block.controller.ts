@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BlockRepository } from './block.repository';
 import { BlockService } from './blocks.service';
 import { RpcClient } from '../../lib/wallet/rpcClient';
-import { Block, BlockDb } from './block.interface';
+import { BlockDb } from './block.interface';
 import { TxService } from './../tx/tx.service';
 import { TxRepository } from './../tx/tx.repository';
 import { AddressService } from './../addresses/address.service';
@@ -17,7 +17,6 @@ export class BlockController {
   private blockService = new BlockService(blockRepository, rpcClient);
   private txService = new TxService(txRepository, rpcClient);
   private addressService = new AddressService(addressRepository, rpcClient);
-  private client = rpcClient;
 
   public getBlock = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -25,7 +24,7 @@ export class BlockController {
       let block: BlockDb;
 
       if (Number.isNaN(Number(id))) {
-        block = await this.client.getBlockByHash(id);
+        block = await this.blockService.getBlockByHash(id);
       } else {
         block = await this.blockService.getBlockByHeight(id);
       }

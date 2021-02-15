@@ -1,5 +1,5 @@
 import { Block } from '../blocks/block.interface';
-import { Tx } from './tx.interface';
+import { Tx, TxDb } from './tx.interface';
 import { TxRepository } from './tx.repository';
 import { RpcClient } from '../../lib/wallet/rpcClient';
 
@@ -10,6 +10,12 @@ export class TxService {
   constructor(repository, rpcClient) {
     this.txRepository = repository;
     this.rpcClient = rpcClient;
+  }
+
+  public async getTx(id: string): Promise<TxDb> {
+    const tx = await this.rpcClient.getRawTransaction(id);
+
+    return tx;
   }
 
   public async createTx(block: Block): Promise<Tx[]> {
