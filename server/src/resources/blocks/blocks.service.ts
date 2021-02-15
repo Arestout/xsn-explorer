@@ -11,6 +11,10 @@ export class BlockService {
     this.rpcClient = rpcClient;
   }
 
+  public async getLatestBlockHeight(): Promise<number> {
+    return await this.blockRepository.getLatestBlockHeight();
+  }
+
   public async getBlockByHeight(height: string): Promise<Block> {
     const hash = await this.rpcClient.getBlockHash(height);
     const block = await this.getBlockByHash(hash);

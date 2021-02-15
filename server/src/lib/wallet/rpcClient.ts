@@ -28,23 +28,30 @@ export class RpcClient implements IRpcClient {
     try {
       const { data } = await axios.post(this.url, body, config);
 
-      return data.result;
+      return data;
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
     }
   }
 
+  public async ping(): Promise<Record<string, string | null>> {
+    return await this.getData('ping');
+  }
+
   public async getBlockHash(height: string): Promise<string> {
-    return await this.getData('getblockhash', [Number(height)]);
+    const { result } = await this.getData('getblockhash', [Number(height)]);
+    return result;
   }
 
   public async getBlockByHash(hash: string): Promise<Block> {
     const verbosity = 2;
-    return await this.getData('getblock', [hash, verbosity]);
+    const { result } = await this.getData('getblock', [hash, verbosity]);
+    return result;
   }
 
   public async getRawTransaction(txId: string): Promise<Tx> {
-    return await this.getData('getrawtransaction', [txId, 1]);
+    const { result } = await this.getData('getrawtransaction', [txId, 1]);
+    return result;
   }
 }

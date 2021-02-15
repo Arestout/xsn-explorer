@@ -2,7 +2,6 @@ import { Router } from 'express';
 
 import { Routes } from '../../interfaces/routes.interface';
 import { BlockController } from './block.controller';
-import { BlockService } from './blocks.service';
 
 export class BlocksRoute implements Routes {
   public path = '/blocks';
@@ -14,6 +13,6 @@ export class BlocksRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:hash`, this.blockController.getBlockByHash);
+    this.router.get(`${this.path}/:id`, this.blockController.getBlock);
   }
 }

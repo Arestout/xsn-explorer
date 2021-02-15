@@ -40,9 +40,3 @@ export default function (sequelize: Sequelize): typeof TxModel {
 
   return TxModel;
 }
-
-// TxModel.associate = function (models) {
-//   TxModel.hasMany(models.vin, { as: 'Vin', foreignKey: 'vinId', unique: false });
-//   TxModel.hasMany(models.vout, { as: 'Vout', foreignKey: 'voutId', unique: false });
-//   TxModel.belongsTo(models.block, { unique: false });
-// };

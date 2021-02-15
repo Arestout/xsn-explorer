@@ -1,9 +1,22 @@
 import { Block, BlockDb } from './block.interface';
 import HttpException from '../../utils/HttpException';
 import DB from './../../database/index';
+import { isEmpty } from '../../utils/util';
 
 export class BlockRepository {
   public blocks = DB.Blocks;
+
+  public async getLatestBlockHeight(): Promise<number> {
+    const block = await this.blocks.findOne({
+      order: [['createdAt', 'DESC']],
+    });
+
+    if (isEmpty(block)) {
+      throw new HttpException(404, `No blocks found`);
+    }
+
+    return block.height;
+  }
 
   public async createBlock(block: Block): Promise<BlockDb> {
     const findBlock: BlockDb = await this.blocks.findOne({ where: { hash: block.hash } });

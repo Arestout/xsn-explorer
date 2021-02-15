@@ -5,10 +5,6 @@ export class AddressModel extends Model<Address> implements Address {
   public address: string;
   public balance: number;
   public tx: string;
-
-  // static associate(models) {
-  //   this.hasMany(models.Tx, { as: 'tx', foreignKey: 'address' });
-  // }
 }
 
 export default function (sequelize: Sequelize): typeof AddressModel {

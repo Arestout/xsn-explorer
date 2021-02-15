@@ -1,5 +1,5 @@
 import { Block } from '../blocks/block.interface';
-import { TxDb, Tx } from './tx.interface';
+import { Tx } from './tx.interface';
 import { TxRepository } from './tx.repository';
 import { RpcClient } from '../../lib/wallet/rpcClient';
 
