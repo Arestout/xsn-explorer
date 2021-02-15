@@ -1,7 +1,9 @@
 import { Router } from 'express';
 
 import { Routes } from '../../interfaces/routes.interface';
+import validationMiddleware from '../../middlewares/validation.middleware';
 import { BlockController } from './block.controller';
+import { ValidateBlockId } from './block.validate';
 
 export class BlocksRoute implements Routes {
   public path = '/blocks';
@@ -13,6 +15,6 @@ export class BlocksRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:id`, this.blockController.getBlock);
+    this.router.get(`${this.path}/:id`, validationMiddleware(ValidateBlockId, 'params'), this.blockController.getBlock);
   }
 }

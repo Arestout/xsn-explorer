@@ -1,6 +1,7 @@
 import { Block, BlockDb } from './block.interface';
 import { BlockRepository } from './block.repository';
 import { RpcClient } from '../../lib/wallet/rpcClient';
+import { Transaction } from 'sequelize/types';
 
 export class BlockService {
   public blockRepository: BlockRepository;
@@ -28,8 +29,8 @@ export class BlockService {
     return block;
   }
 
-  public async createBlock(block: Block): Promise<BlockDb> {
-    const blockDb: BlockDb = await this.blockRepository.createBlock(block);
+  public async createBlock(block: Block, transaction: Transaction): Promise<BlockDb> {
+    const blockDb: BlockDb = await this.blockRepository.createBlock(block, transaction);
 
     return blockDb;
   }

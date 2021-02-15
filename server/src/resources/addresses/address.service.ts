@@ -1,7 +1,7 @@
-import { Block } from '../blocks/block.interface';
 import { RpcClient } from '../../lib/wallet/rpcClient';
 import { AddressRepository } from './address.repository';
 import { Tx } from './../tx/tx.interface';
+import { Transaction } from 'sequelize/types';
 
 export class AddressService {
   public addressRepository: AddressRepository;
@@ -12,16 +12,16 @@ export class AddressService {
     this.rpcClient = rpcClient;
   }
 
-  public async createAddress(txs: Tx[]): Promise<void> {
+  public async createAddress(txs: Tx[], transaction: Transaction): Promise<void> {
     for (const tx of txs) {
-      await this.addressRepository.updateVout(tx);
+      await this.addressRepository.updateVout(tx, transaction);
 
       for (const vin of tx.vin) {
         if (vin.txid) {
           const tx = await this.rpcClient.getRawTransaction(vin.txid);
           const vout = tx.vout.find(vout => (vout.n = vin.vout));
           if (vout.value === 0) continue;
-          await this.addressRepository.updateVin(vout);
+          await this.addressRepository.updateVin(vout, transaction);
         }
       }
     }

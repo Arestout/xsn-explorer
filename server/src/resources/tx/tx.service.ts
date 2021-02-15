@@ -2,6 +2,7 @@ import { Block } from '../blocks/block.interface';
 import { Tx, TxDb } from './tx.interface';
 import { TxRepository } from './tx.repository';
 import { RpcClient } from '../../lib/wallet/rpcClient';
+import { Transaction } from 'sequelize/types';
 
 export class TxService {
   public txRepository: TxRepository;
@@ -18,7 +19,7 @@ export class TxService {
     return tx;
   }
 
-  public async createTx(block: Block): Promise<Tx[]> {
+  public async createTx(block: Block, transaction: Transaction): Promise<Tx[]> {
     const txs: Tx[] = [];
 
     for (const tx of block.tx) {
@@ -27,7 +28,7 @@ export class TxService {
     }
 
     for (const tx of txs) {
-      await this.txRepository.createTx(tx);
+      await this.txRepository.createTx(tx, transaction);
     }
 
     return txs;
