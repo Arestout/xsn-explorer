@@ -11,6 +11,13 @@ export class BlockService {
     this.rpcClient = rpcClient;
   }
 
+  public async getBlockByHeight(height: string): Promise<Block> {
+    const hash = await this.rpcClient.getBlockHash(height);
+    const block = await this.getBlockByHash(hash);
+
+    return block;
+  }
+
   public async getBlockByHash(hash: string): Promise<Block> {
     const block = await this.rpcClient.getBlockByHash(hash);
 

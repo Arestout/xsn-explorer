@@ -11,6 +11,7 @@ import DB from './database';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
 import { Routes } from './interfaces/routes.interface';
+import { WalletStreamer } from './lib/wallet/walletStreamer';
 
 class App {
   public app: express.Application;
@@ -27,6 +28,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    // this.initializeWalletStreamer();
   }
 
   public listen() {
@@ -40,7 +42,7 @@ class App {
   }
 
   private connectToDatabase() {
-    DB.sequelize.sync({ force: true });
+    DB.sequelize.sync({ force: false });
   }
 
   private initializeMiddlewares() {
@@ -82,6 +84,11 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+
+  private initializeWalletStreamer() {
+    const walletStreamer = new WalletStreamer();
+    walletStreamer.start();
   }
 }
 
