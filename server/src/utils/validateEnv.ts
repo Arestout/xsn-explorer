@@ -8,7 +8,6 @@ function validateEnv() {
     POSTGRES_PASSWORD: str(),
     POSTGRES_HOST: str(),
     POSTGRES_DB: str(),
-    JWT_SECRET: str(),
   });
 }
 

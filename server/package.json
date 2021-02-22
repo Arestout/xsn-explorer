@@ -1,23 +1,24 @@
 {
   "name": "stakenet-explorer-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Stakenet explorer API",
   "author": "Arestout",
   "license": "ISC",
   "scripts": {
-    "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
+    "start": "npm run build && node dist/server.js",
     "dev": "nodemon",
+    "debug": "nodemon",
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.2",
     "class-validator": "^0.13.1",
     "cors": "^2.8.5",
+    "decimal.js": "^10.2.1",
     "envalid": "^6.0.2",
     "express": "^4.17.1",
     "helmet": "^4.3.1",

@@ -6,13 +6,14 @@ export class VoutModel extends Model<Vout> implements Vout {
   public n: number;
   public type: string;
   public tx: string;
+  public address: string;
 }
 
 export default function (sequelize: Sequelize): typeof VoutModel {
   VoutModel.init(
     {
       value: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
       n: {
@@ -24,6 +25,10 @@ export default function (sequelize: Sequelize): typeof VoutModel {
         allowNull: false,
       },
       tx: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      address: {
         type: DataTypes.STRING,
         allowNull: false,
       },

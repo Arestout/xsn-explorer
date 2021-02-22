@@ -1,5 +1,6 @@
 export interface Address {
   address: string;
-  balance: number;
+  value: number;
+  time: number;
   tx: string;
 }

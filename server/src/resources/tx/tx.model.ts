@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { Tx } from './tx.interface';
+import { Tx } from './interfaces/tx.interface';
 
 export class TxModel extends Model<Tx> implements Tx {
   public txid: string;

@@ -1,10 +1,11 @@
-import { Block, BlockDb } from './block.interface';
+import { Block, BlockDb } from './interfaces/block.interface';
 import HttpException from '../../utils/HttpException';
 import DB from './../../database/index';
 import { isEmpty } from '../../utils/util';
 import { Transaction } from 'sequelize/types';
+import { IBlockRepository } from './interfaces/blockRepository.interface';
 
-export class BlockRepository {
+export class BlockRepository implements IBlockRepository {
   public blocks = DB.Blocks;
 
   public async getLatestBlockHeight(): Promise<number> {
@@ -19,7 +20,7 @@ export class BlockRepository {
     return block.height;
   }
 
-  public async createBlock(block: Block, transaction: Transaction): Promise<BlockDb> {
+  public async create(block: Block, transaction: Transaction): Promise<BlockDb> {
     const findBlock: BlockDb = await this.blocks.findOne({ where: { hash: block.hash } });
     if (findBlock) throw new HttpException(409, `The block with hash ${block.hash} already exists`);
 

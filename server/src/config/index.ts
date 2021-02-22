@@ -1,4 +1,4 @@
-const dbConfig = {
+export const dbConfig = {
   development: {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
@@ -22,4 +22,8 @@ const dbConfig = {
   },
 };
 
-export default dbConfig;
+export const PORT = process.env.PORT || 3001;
+export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const REDIS_HOST = process.env.REDIS_HOST;
+export const WALLET = process.env.WALLET;
+export const DIGITS = 1e8;

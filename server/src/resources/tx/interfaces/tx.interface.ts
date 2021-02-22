@@ -1,5 +1,5 @@
-import { Vout } from './vout/vout.interface';
-import { Vin } from './vin/vin.interface';
+import { Vout } from '../vout/vout.interface';
+import { Vin } from '../vin/vin.interface';
 
 export interface TxNonDB {
   hash?: string;

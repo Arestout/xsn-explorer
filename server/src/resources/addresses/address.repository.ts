@@ -1,60 +1,43 @@
-import { Transaction } from 'sequelize/types';
 import { isEmpty } from '../../utils/util';
 import DB from './../../database/index';
-import { Tx } from './../tx/tx.interface';
-import { Vout } from './../tx/vout/vout.interface';
+import HttpException from '../../utils/HttpException';
+import { DIGITS } from '../../config';
+import { OneAddress, IAddressRepository } from './interfaces/addressRepository';
 
-export class AddressRepository {
+export class AddressRepository implements IAddressRepository {
   private addresses = DB.Addresses;
 
-  public async updateVout(tx: Tx, transaction: Transaction): Promise<void> {
-    for (const vout of tx.vout) {
-      if (vout.value === 0) continue;
-
-      let address = await this.addresses.findOne({
-        where: {
-          address: vout.scriptPubKey.addresses[0],
-        },
-      });
-
-      if (isEmpty(address)) {
-        address = await this.addresses.create(
-          {
-            address: vout.scriptPubKey.addresses[0],
-            tx: tx.txid,
-            balance: 0,
-          },
-          {
-            transaction,
-          },
-        );
-      }
-
-      address.update(
-        {
-          balance: address.balance + Number(vout.value),
-        },
-        {
-          transaction,
-        },
-      );
-    }
-  }
-
-  public async updateVin(vout: Vout, transaction: Transaction): Promise<void> {
-    const address = await this.addresses.findOne({
+  public async findOne(address: string): Promise<OneAddress> {
+    const addressDb = await this.addresses.findOne({
+      attributes: ['address', [DB.Sequelize.fn('sum', DB.Sequelize.col('value')), 'balance']],
       where: {
-        address: vout.scriptPubKey.addresses[0],
+        address,
       },
+      group: 'address',
+      raw: true,
     });
 
-    address.update(
-      {
-        balance: address.balance - Number(vout.value),
+    if (isEmpty(addressDb)) {
+      throw new HttpException(404, 'Address not found');
+    }
+
+    const balance = (addressDb.balance / DIGITS).toFixed(8);
+
+    const transactions = await this.addresses.findAll({
+      attributes: ['tx', 'value', 'time'],
+      where: {
+        address,
       },
-      {
-        transaction,
+      order: [['time', 'DESC']],
+      raw: true,
+    });
+
+    return {
+      address: {
+        address: addressDb.address,
+        balance,
       },
-    );
+      transactions,
+    };
   }
 }

@@ -21,13 +21,15 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
-    command: npm run dev
+    # command: npm run dev
+    command: npm run debug
     volumes:
       - ./server/src:/app/src
     environment:
       - NODE_ENV=development
     ports:
       - '3001:3001'
+      - '9229:9229'
     depends_on:
       - db-test
     stdin_open: true

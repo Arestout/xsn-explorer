@@ -3,8 +3,10 @@ import { Address } from './address.interface';
 
 export class AddressModel extends Model<Address> implements Address {
   public address: string;
-  public balance: number;
+  public value: number;
   public tx: string;
+  public time: number;
+  public balance: number;
 }
 
 export default function (sequelize: Sequelize): typeof AddressModel {
@@ -14,10 +16,18 @@ export default function (sequelize: Sequelize): typeof AddressModel {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      balance: {
-        type: DataTypes.FLOAT,
+      value: {
+        type: DataTypes.BIGINT,
         allowNull: false,
         defaultValue: 0,
+        get() {
+          const rawValue = this.getDataValue('value');
+          return rawValue ? (rawValue / 1e8).toFixed(8) : null;
+        },
+      },
+      time: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       tx: {
         type: DataTypes.STRING,

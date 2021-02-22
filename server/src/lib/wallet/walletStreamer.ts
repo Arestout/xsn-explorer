@@ -1,27 +1,31 @@
-import { BlockController } from '../../resources/blocks/block.controller';
+import { logger } from '../../utils/logger';
 import { sleep } from '../../utils/util';
-import { RpcClient } from './rpcClient';
+import { IRpcClient } from './rpcClient.interface';
+import { IBlockController } from './../../resources/blocks/interfaces/blockController.interface';
 
 export class WalletStreamer {
   private blockHeight: number;
-  private blockHeightWallet: number;
-  private blockController = new BlockController();
-  private timeout = 50;
-  private rpcClient = new RpcClient('http://user:password@wallet:8332');
+  private timeout = 20;
+  private blockController: IBlockController;
+  private rpcClient: IRpcClient;
+
+  public constructor(rpcClient: IRpcClient, blockController: IBlockController) {
+    this.rpcClient = rpcClient;
+    this.blockController = blockController;
+  }
 
   public async start(): Promise<void> {
-    // await sleep(60000); // 1 min
+    await sleep(60000); // 1 min
     await this.getLatestBlockHeight();
     await this.pingWallet();
   }
 
   private async streamData(height: number): Promise<void> {
-    this.compareHeights();
     try {
-      await this.blockController.createBlock(String(height));
+      await this.blockController.create(String(height));
       this.blockHeight += 1;
     } catch (error) {
-      console.log(error);
+      logger.error(error.message);
       if (error.status === 409) {
         this.blockHeight += 1;
       }
@@ -33,8 +37,7 @@ export class WalletStreamer {
   private async pingWallet(): Promise<void> {
     const response = await this.rpcClient.ping();
     if (response?.error === null) {
-      await this.streamData(this.blockHeight);
-      return;
+      return await this.streamData(this.blockHeight);
     }
 
     setTimeout(async () => await this.pingWallet(), 1000);
@@ -43,16 +46,9 @@ export class WalletStreamer {
   private async getLatestBlockHeight(): Promise<void> {
     try {
       const blockHeightDb: number = await this.blockController.getLatestBlockHeight();
-      this.blockHeightWallet = await this.rpcClient.getBlockCount();
       this.blockHeight = blockHeightDb + 1;
     } catch (error) {
-      this.blockHeight = 0; // TODO
-    }
-  }
-
-  private async compareHeights(): Promise<void> {
-    if (this.blockHeight == this.blockHeightWallet) {
-      this.timeout = 1000;
+      this.blockHeight = 1; // TODO
     }
   }
 }

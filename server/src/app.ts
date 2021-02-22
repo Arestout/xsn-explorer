@@ -11,6 +11,9 @@ import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
 import { Routes } from './interfaces/routes.interface';
 import { WalletStreamer } from './lib/wallet/walletStreamer';
+import { PORT, NODE_ENV, WALLET } from './config';
+import { RpcClient } from './lib/wallet/rpcClient';
+import { BlockController } from './resources/blocks/block.controller';
 
 class App {
   public app: express.Application;
@@ -19,15 +22,15 @@ class App {
 
   constructor(routes: Routes[]) {
     this.app = express();
-    this.port = process.env.PORT || 3001;
-    this.env = process.env.NODE_ENV || 'development';
+    this.port = PORT;
+    this.env = NODE_ENV;
 
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    // this.initializeWalletStreamer();
+    this.initializeWalletStreamer();
   }
 
   public listen() {
@@ -86,7 +89,9 @@ class App {
   }
 
   private initializeWalletStreamer() {
-    const walletStreamer = new WalletStreamer();
+    const rpcClient = new RpcClient(WALLET);
+    const blockController = new BlockController();
+    const walletStreamer = new WalletStreamer(rpcClient, blockController);
     walletStreamer.start();
   }
 }

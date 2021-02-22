@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { BlockDb } from './block.interface';
+import { BlockDb } from './interfaces/block.interface';
 
 export class BlockModel extends Model<BlockDb> implements BlockDb {
   public hash: string;

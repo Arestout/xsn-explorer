@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import config from '../config';
+import { dbConfig } from '../config';
 import { logger } from '../utils/logger';
 import BlockModel from '../resources/blocks/block.model';
 import TxModel from './../resources/tx/tx.model';
@@ -8,9 +8,9 @@ import VoutModel from '../resources/tx/vout/vout.model';
 import AddressModel from '../resources/addresses/address.model';
 
 const env = process.env.NODE_ENV || 'development';
-const sequelize = new Sequelize.Sequelize(config[env].database, config[env].username, config[env].password, {
-  host: config[env].host,
-  dialect: config[env].dialect,
+const sequelize = new Sequelize.Sequelize(dbConfig[env].database, dbConfig[env].username, dbConfig[env].password, {
+  host: dbConfig[env].host,
+  dialect: dbConfig[env].dialect,
   timezone: '+09:00',
   define: {
     charset: 'utf8mb4',
@@ -18,7 +18,7 @@ const sequelize = new Sequelize.Sequelize(config[env].database, config[env].user
     underscored: true,
     freezeTableName: true,
   },
-  pool: config[env].pool,
+  pool: dbConfig[env].pool,
   logQueryParameters: env === 'development',
   logging: (query, time) => {
     logger.info(time + 'ms' + ' ' + query);

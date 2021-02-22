@@ -3,5 +3,5 @@
   "watch": ["src", ".env"],
   "ext": "js,ts,json",
   "ignore": ["src/**/*.spec.ts", "src/**/*.test.ts", "/node_modules/"],
-  "exec": "ts-node --transpile-only src/server.ts"
+  "exec": "node --inspect=0.0.0.0:9229 --require ts-node/register src/server.ts"
 }

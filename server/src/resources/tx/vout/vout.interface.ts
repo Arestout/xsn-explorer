@@ -4,4 +4,5 @@ export interface Vout {
   scriptPubKey?: Record<string, string>;
   type: string;
   tx?: string;
+  address: string;
 }

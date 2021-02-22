@@ -1,13 +1,13 @@
-import { Block, BlockDb } from './block.interface';
-import { BlockRepository } from './block.repository';
-import { RpcClient } from '../../lib/wallet/rpcClient';
+import { Block, BlockDb } from './interfaces/block.interface';
 import { Transaction } from 'sequelize/types';
+import { IRpcClient } from './../../lib/wallet/rpcClient.interface';
+import { IBlockRepository } from './interfaces/blockRepository.interface';
 
 export class BlockService {
-  public blockRepository: BlockRepository;
-  public rpcClient: RpcClient;
+  public blockRepository: IBlockRepository;
+  public rpcClient: IRpcClient;
 
-  constructor(repository, rpcClient) {
+  constructor(repository: IBlockRepository, rpcClient: IRpcClient) {
     this.blockRepository = repository;
     this.rpcClient = rpcClient;
   }
@@ -16,21 +16,21 @@ export class BlockService {
     return await this.blockRepository.getLatestBlockHeight();
   }
 
-  public async getBlockByHeight(height: string): Promise<Block> {
+  public async findByHeight(height: string): Promise<Block> {
     const hash = await this.rpcClient.getBlockHash(height);
-    const block = await this.getBlockByHash(hash);
+    const block = await this.findByHash(hash);
 
     return block;
   }
 
-  public async getBlockByHash(hash: string): Promise<Block> {
+  public async findByHash(hash: string): Promise<Block> {
     const block = await this.rpcClient.getBlockByHash(hash);
 
     return block;
   }
 
-  public async createBlock(block: Block, transaction: Transaction): Promise<BlockDb> {
-    const blockDb: BlockDb = await this.blockRepository.createBlock(block, transaction);
+  public async create(block: Block, transaction: Transaction): Promise<BlockDb> {
+    const blockDb: BlockDb = await this.blockRepository.create(block, transaction);
 
     return blockDb;
   }

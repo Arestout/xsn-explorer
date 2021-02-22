@@ -1,14 +1,14 @@
-import { Block } from '../blocks/block.interface';
-import { Tx, TxDb } from './tx.interface';
-import { TxRepository } from './tx.repository';
-import { RpcClient } from '../../lib/wallet/rpcClient';
+import { Block } from '../blocks/interfaces/block.interface';
+import { Tx, TxDb } from './interfaces/tx.interface';
 import { Transaction } from 'sequelize/types';
+import { IRpcClient } from './../../lib/wallet/rpcClient.interface';
+import { ITxRepository } from './interfaces/txRepository.interface';
 
 export class TxService {
-  public txRepository: TxRepository;
-  public rpcClient: RpcClient;
+  public txRepository: ITxRepository;
+  public rpcClient: IRpcClient;
 
-  constructor(repository, rpcClient) {
+  constructor(repository: ITxRepository, rpcClient: IRpcClient) {
     this.txRepository = repository;
     this.rpcClient = rpcClient;
   }
@@ -19,7 +19,7 @@ export class TxService {
     return tx;
   }
 
-  public async createTx(block: Block, transaction: Transaction): Promise<Tx[]> {
+  public async create(block: Block, transaction: Transaction): Promise<void> {
     const txs: Tx[] = [];
 
     for (const tx of block.tx) {
@@ -28,9 +28,7 @@ export class TxService {
     }
 
     for (const tx of txs) {
-      await this.txRepository.createTx(tx, transaction);
+      await this.txRepository.create(tx, transaction);
     }
-
-    return txs;
   }
 }

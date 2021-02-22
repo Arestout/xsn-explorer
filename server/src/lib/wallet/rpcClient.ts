@@ -1,17 +1,8 @@
-import axios from 'axios';
 import request from 'request';
-import { Tx } from '../../resources/tx/tx.interface';
-import { Block } from '../../resources/blocks/block.interface';
+import { Tx } from '../../resources/tx/interfaces/tx.interface';
+import { Block } from '../../resources/blocks/interfaces/block.interface';
 import HttpException from '../../utils/HttpException';
-
-interface IRpcClient {
-  ping(): Promise<Record<string, string | null>>;
-  getBlockCount(): Promise<number>;
-  getBlockHash(height: string): Promise<string>;
-  getBlockByHash(hash: string): Promise<Block>;
-  getRawTransaction(txId: string): Promise<Tx>;
-}
-
+import { IRpcClient } from './rpcClient.interface';
 export class RpcClient implements IRpcClient {
   private url: string;
 
@@ -33,7 +24,7 @@ export class RpcClient implements IRpcClient {
       }),
     };
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if (error) {
           console.error('An error has occurred: ', error);
@@ -43,22 +34,6 @@ export class RpcClient implements IRpcClient {
         resolve(JSON.parse(body));
       });
     });
-
-    // const config = {
-    //   headers: this.headers,
-    //   timeout: 1000,
-    // };
-    // const body = JSON.stringify({ jsonrpc: '2.0', method, params });
-
-    // try {
-    //   const { data } = await axios.post(this.url, body, config);
-    //   console.log({ data });
-    //   return data;
-    // } catch (error) {
-    //   console.log(error);
-    //   console.log(error.message);
-    //   throw new Error(error.message);
-    // }
   }
 
   public async ping(): Promise<Record<string, string | null>> {
