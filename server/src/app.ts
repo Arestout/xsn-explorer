@@ -30,7 +30,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    this.initializeWalletStreamer();
+    // this.initializeWalletStreamer();
   }
 
   public listen() {

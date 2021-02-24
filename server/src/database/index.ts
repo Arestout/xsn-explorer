@@ -6,8 +6,9 @@ import TxModel from './../resources/tx/tx.model';
 import VinModel from '../resources/tx/vin/vin.model';
 import VoutModel from '../resources/tx/vout/vout.model';
 import AddressModel from '../resources/addresses/address.model';
+import { NODE_ENV } from './../config/index';
 
-const env = process.env.NODE_ENV || 'development';
+const env = NODE_ENV;
 const sequelize = new Sequelize.Sequelize(dbConfig[env].database, dbConfig[env].username, dbConfig[env].password, {
   host: dbConfig[env].host,
   dialect: dbConfig[env].dialect,

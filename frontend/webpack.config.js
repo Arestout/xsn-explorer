@@ -1,7 +1,6 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpackRules = require('./webpackRules');
 const Dotenv = require('dotenv-webpack');
 
@@ -15,28 +14,8 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {},
   },
-  output: {
-    path: path.join(__dirname, '/dist'),
-    filename: 'index.js',
-  },
   module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: isDev,
-              reloadAll: true,
-            },
-          },
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      ...webpackRules,
-    ],
+    rules: [...webpackRules],
   },
   devServer: {
     historyApiFallback: true,
@@ -45,9 +24,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
     }),
     new Dotenv(),
   ],
