@@ -5,6 +5,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Box, CardHeader } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
@@ -18,34 +20,26 @@ const useStyles = makeStyles({
   },
 });
 
-export const SimpleCard = () => {
+export const SimpleCard = (props) => {
   const classes = useStyles();
+  const theme = useTheme();
+  console.log(theme);
+  console.log(theme.palette.primary.light);
+  const { title, text, button } = props;
 
   return (
     <Card className={classes.root}>
+      <Box>
+        <Typography variant="h6" component="h2" color="textSecondary">
+          {title}
+        </Typography>
+      </Box>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="h2">
-          be lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
         <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+          {text}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
+      <CardActions>{button}</CardActions>
     </Card>
   );
 };

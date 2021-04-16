@@ -12,9 +12,9 @@ export class AddressController {
   public findOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { address } = req.params;
-      const addressDb = await this.addressService.findOne(address);
+      const addressDTO = await this.addressService.findOne(address);
 
-      res.status(200).json(addressDb);
+      res.status(200).json(addressDTO);
     } catch (error) {
       next(error);
     }

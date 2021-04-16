@@ -1,4 +1,4 @@
-export interface Address {
+export interface AddressDTO {
   address: string;
   value: number;
   time: number;

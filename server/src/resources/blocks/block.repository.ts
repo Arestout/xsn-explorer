@@ -1,4 +1,4 @@
-import { Block, BlockDb } from './interfaces/block.interface';
+import { Block, BlockDTO } from './interfaces/block.interface';
 import HttpException from '../../utils/HttpException';
 import DB from './../../database/index';
 import { isEmpty } from '../../utils/util';
@@ -8,23 +8,33 @@ import { IBlockRepository } from './interfaces/blockRepository.interface';
 export class BlockRepository implements IBlockRepository {
   public blocks = DB.Blocks;
 
+  public async findMany(page = 1): Promise<BlockDTO[]> {
+    const limit = 50;
+    const blocks = await this.blocks.findAll({
+      limit,
+      offset: page * limit,
+    });
+
+    return blocks;
+  }
+
   public async getLatestBlockHeight(): Promise<number> {
-    const block = await this.blocks.findOne({
+    const blockDTO = await this.blocks.findOne({
       order: [['createdAt', 'DESC']],
     });
 
-    if (isEmpty(block)) {
+    if (isEmpty(blockDTO)) {
       throw new HttpException(404, `No blocks found`);
     }
 
-    return block.height;
+    return blockDTO.height;
   }
 
-  public async create(block: Block, transaction: Transaction): Promise<BlockDb> {
-    const findBlock: BlockDb = await this.blocks.findOne({ where: { hash: block.hash } });
+  public async create(block: Block, transaction: Transaction): Promise<BlockDTO> {
+    const findBlock = await this.blocks.findOne({ where: { hash: block.hash } });
     if (findBlock) throw new HttpException(409, `The block with hash ${block.hash} already exists`);
 
-    const blockDB: BlockDb = await this.blocks.create(
+    const blockDTO = await this.blocks.create(
       {
         hash: block.hash,
         size: block.size,
@@ -45,6 +55,6 @@ export class BlockRepository implements IBlockRepository {
       },
     );
 
-    return blockDB;
+    return blockDTO;
   }
 }

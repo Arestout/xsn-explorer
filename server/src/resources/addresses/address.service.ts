@@ -1,5 +1,5 @@
 import { IRpcClient } from './../../lib/wallet/rpcClient.interface';
-import { OneAddress, IAddressRepository } from './interfaces/addressRepository';
+import { OneAddress, IAddressRepository } from './interfaces/addressRepository.interface';
 
 export class AddressService {
   public addressRepository: IAddressRepository;

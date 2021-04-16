@@ -1,6 +1,6 @@
-import { BlockDb } from './block.interface';
+import { BlockDTO } from './block.interface';
 
 export interface IBlockController {
   getLatestBlockHeight(): Promise<number>;
-  create(height: string): Promise<BlockDb>;
+  create(height: string): Promise<BlockDTO>;
 }

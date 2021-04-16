@@ -15,6 +15,7 @@ export class BlocksRoute implements Routes {
   }
 
   private initializeRoutes() {
+    this.router.get(`${this.path}/`, this.blockController.findMany);
     this.router.get(`${this.path}/:id`, validationMiddleware(ValidateBlockId, 'params'), this.blockController.findOne);
   }
 }

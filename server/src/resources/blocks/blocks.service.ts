@@ -1,4 +1,4 @@
-import { Block, BlockDb } from './interfaces/block.interface';
+import { Block, BlockDTO } from './interfaces/block.interface';
 import { Transaction } from 'sequelize/types';
 import { IRpcClient } from './../../lib/wallet/rpcClient.interface';
 import { IBlockRepository } from './interfaces/blockRepository.interface';
@@ -16,6 +16,12 @@ export class BlockService {
     return await this.blockRepository.getLatestBlockHeight();
   }
 
+  public async findMany(page: number): Promise<BlockDTO[]> {
+    const blocks = await this.blockRepository.findMany(page);
+
+    return blocks;
+  }
+
   public async findByHeight(height: string): Promise<Block> {
     const hash = await this.rpcClient.getBlockHash(height);
     const block = await this.findByHash(hash);
@@ -29,9 +35,9 @@ export class BlockService {
     return block;
   }
 
-  public async create(block: Block, transaction: Transaction): Promise<BlockDb> {
-    const blockDb: BlockDb = await this.blockRepository.create(block, transaction);
+  public async create(block: Block, transaction: Transaction): Promise<BlockDTO> {
+    const blockDTO = await this.blockRepository.create(block, transaction);
 
-    return blockDb;
+    return blockDTO;
   }
 }

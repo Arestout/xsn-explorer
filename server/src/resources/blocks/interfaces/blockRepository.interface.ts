@@ -1,7 +1,8 @@
 import { Transaction } from 'sequelize/types';
-import { Block, BlockDb } from './block.interface';
+import { Block, BlockDTO } from './block.interface';
 
 export interface IBlockRepository {
+  findMany(page: number): Promise<BlockDTO[]>;
   getLatestBlockHeight(): Promise<number>;
-  create(block: Block, transaction: Transaction): Promise<BlockDb>;
+  create(block: Block, transaction: Transaction): Promise<BlockDTO>;
 }

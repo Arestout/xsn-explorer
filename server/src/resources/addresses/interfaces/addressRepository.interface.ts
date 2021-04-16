@@ -1,4 +1,4 @@
-import { Tx } from './../../tx/interfaces/tx.interface';
+import { Tx } from '../../tx/interfaces/tx.interface';
 
 interface Address {
   address: string;

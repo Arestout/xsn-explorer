@@ -1,15 +1,5 @@
 import { Tx } from '../../tx/interfaces/tx.interface';
-
-interface BlockNonDb {
-  strippedsize?: number;
-  weight?: number;
-  versionHex?: string;
-  merkleroot?: string;
-  tx?: Tx[];
-  confirmations?: number;
-}
-
-export interface BlockDb {
+export interface BlockDTO {
   hash: string;
   size: number;
   height: number;
@@ -25,4 +15,11 @@ export interface BlockDb {
   nextblockhash: null | string;
 }
 
-export interface Block extends BlockDb, BlockNonDb {}
+export interface Block extends BlockDTO {
+  strippedsize: number;
+  weight: number;
+  versionHex: string;
+  merkleroot: string;
+  tx: Tx[];
+  confirmations: number;
+}

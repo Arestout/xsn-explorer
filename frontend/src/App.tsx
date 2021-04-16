@@ -3,6 +3,7 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { ThemeProvider } from '@material-ui/styles';
 import { SimpleCard } from './components/SimpleCard/SimpleCard';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {
   AppBar,
   CssBaseline,
@@ -11,12 +12,6 @@ import {
   Container,
   Grid,
 } from '@material-ui/core';
-
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-  },
-});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +29,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const App: React.FC = () => {
   const classes = useStyles();
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode]
+  );
 
   return (
     <div className="container">
@@ -50,7 +56,7 @@ export const App: React.FC = () => {
           <div className={classes.root}>
             <Grid container spacing={7}>
               <Grid item xs={12} sm={6} md={3}>
-                <SimpleCard />
+                <SimpleCard title="Total supply" text="114382803.70499662" />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <SimpleCard />

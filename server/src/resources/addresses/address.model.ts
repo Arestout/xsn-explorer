@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { Address } from './address.interface';
+import { AddressDTO } from './interfaces/address.interface';
 
-export class AddressModel extends Model<Address> implements Address {
+export class AddressModel extends Model<AddressDTO> implements AddressDTO {
   public address: string;
   public value: number;
   public tx: string;

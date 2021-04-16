@@ -2,7 +2,7 @@ import { isEmpty } from '../../utils/util';
 import DB from './../../database/index';
 import HttpException from '../../utils/HttpException';
 import { DIGITS } from '../../config';
-import { OneAddress, IAddressRepository } from './interfaces/addressRepository';
+import { OneAddress, IAddressRepository } from './interfaces/addressRepository.interface';
 
 export class AddressRepository implements IAddressRepository {
   private addresses = DB.Addresses;

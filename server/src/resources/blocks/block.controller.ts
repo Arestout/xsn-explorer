@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BlockRepository } from './block.repository';
 import { BlockService } from './blocks.service';
 import { RpcClient } from '../../lib/wallet/rpcClient';
-import { BlockDb } from './interfaces/block.interface';
+import { BlockDTO } from './interfaces/block.interface';
 import { TxService } from './../tx/tx.service';
 import { TxRepository } from './../tx/tx.repository';
 import DB from './../../database/index';
@@ -17,18 +17,29 @@ export class BlockController implements IBlockController {
   private blockService = new BlockService(blockRepository, rpcClient);
   private txService = new TxService(txRepository, rpcClient);
 
+  public async findMany(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { page } = req.query;
+      const blocks = await this.blockService.findMany(page);
+
+      res.status(200).json(blocks);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public findOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      let block: BlockDb;
+      let blockDTO: BlockDTO;
 
       if (Number.isNaN(Number(id))) {
-        block = await this.blockService.findByHash(id);
+        blockDTO = await this.blockService.findByHash(id);
       } else {
-        block = await this.blockService.findByHeight(id);
+        blockDTO = await this.blockService.findByHeight(id);
       }
 
-      res.status(200).json(block);
+      res.status(200).json(blockDTO);
     } catch (error) {
       next(error);
     }
@@ -40,7 +51,7 @@ export class BlockController implements IBlockController {
     return blockHeight;
   }
 
-  public create = async (height: string): Promise<BlockDb> => {
+  public create = async (height: string): Promise<BlockDTO> => {
     const transaction = await DB.sequelize.transaction();
 
     try {

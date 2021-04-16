@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
-import { BlockDb } from './interfaces/block.interface';
+import { BlockDTO } from './interfaces/block.interface';
 
-export class BlockModel extends Model<BlockDb> implements BlockDb {
+export class BlockModel extends Model<BlockDTO> implements BlockDTO {
   public hash: string;
   public confirmations: number;
   public size: number;
