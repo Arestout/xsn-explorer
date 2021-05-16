@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { AddressRepository } from './address.repository';
 import { AddressService } from './address.service';
-import { RpcClient } from '../../lib/wallet/rpcClient';
+import { RpcClient } from '../../libs/wallet/rpcClient';
 
 const rpcClient = new RpcClient('http://user:password@wallet:8332');
 const addressRepository = new AddressRepository();

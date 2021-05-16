@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import App from './app';
+import { initRabbitMQ } from './libs/rabbitmq/rabbitmq.config';
 import { AddressRoute } from './resources/addresses/address.route';
 
 import { BlocksRoute } from './resources/blocks/block.route';
@@ -11,3 +12,5 @@ validateEnv();
 const app = new App([new BlocksRoute(), new TxRoute(), new AddressRoute()]);
 
 app.listen();
+
+initRabbitMQ();

@@ -10,9 +10,9 @@ import DB from './database';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
 import { Routes } from './interfaces/routes.interface';
-import { WalletStreamer } from './lib/wallet/walletStreamer';
+import { WalletStreamer } from './libs/wallet/walletStreamer';
 import { PORT, NODE_ENV, WALLET } from './config';
-import { RpcClient } from './lib/wallet/rpcClient';
+import { RpcClient } from './libs/wallet/rpcClient';
 import { BlockController } from './resources/blocks/block.controller';
 
 class App {
@@ -30,7 +30,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    // this.initializeWalletStreamer();
+    this.initializeWalletStreamer();
   }
 
   public listen() {

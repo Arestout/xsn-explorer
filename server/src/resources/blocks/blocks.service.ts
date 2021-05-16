@@ -1,6 +1,5 @@
 import { Block, BlockDTO } from './interfaces/block.interface';
-import { Transaction } from 'sequelize/types';
-import { IRpcClient } from './../../lib/wallet/rpcClient.interface';
+import { IRpcClient } from '../../libs/wallet/rpcClient.interface';
 import { IBlockRepository } from './interfaces/blockRepository.interface';
 
 export class BlockService {
@@ -35,8 +34,9 @@ export class BlockService {
     return block;
   }
 
-  public async create(block: Block, transaction: Transaction): Promise<BlockDTO> {
-    const blockDTO = await this.blockRepository.create(block, transaction);
+  public async create(height: string): Promise<BlockDTO> {
+    const block = await this.findByHeight(height);
+    const blockDTO: BlockDTO = await this.blockRepository.create(block);
 
     return blockDTO;
   }
