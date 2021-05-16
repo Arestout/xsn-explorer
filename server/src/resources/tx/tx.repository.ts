@@ -4,7 +4,7 @@ import DB from './../../database/index';
 import { Transaction } from 'sequelize/types';
 import { Vout } from './vout/vout.interface';
 import { isEmpty } from '../../utils/util';
-import { RpcClient } from '../../lib/wallet/rpcClient';
+import { RpcClient } from '../../libs/wallet/rpcClient';
 import { Lock } from './../../utils/lock';
 import { logger } from '../../utils/logger';
 import { WALLET } from '../../config';

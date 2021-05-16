@@ -1,7 +1,7 @@
 import { logger } from '../../utils/logger';
 import { sleep } from '../../utils/util';
 import { IRpcClient } from './rpcClient.interface';
-import { IBlockController } from './../../resources/blocks/interfaces/blockController.interface';
+import { IBlockController } from '../../resources/blocks/interfaces/blockController.interface';
 
 export class WalletStreamer {
   private blockHeight: number;
@@ -15,7 +15,7 @@ export class WalletStreamer {
   }
 
   public async start(): Promise<void> {
-    await sleep(60000); // 1 min
+    // await sleep(60000); // 1 min
     await this.getLatestBlockHeight();
     await this.pingWallet();
   }

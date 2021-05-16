@@ -2,4 +2,4 @@
 
 The grand plan:
 
-![alt text](http://i.imgur.com/Amelfaa.png)
+![plan](http://i.imgur.com/Amelfaa.png)

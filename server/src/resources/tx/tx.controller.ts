@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { TxService } from './tx.service';
 import { TxRepository } from './tx.repository';
-import { RpcClient } from '../../lib/wallet/rpcClient';
+import { RpcClient } from '../../libs/wallet/rpcClient';
 
 const rpcClient = new RpcClient('http://user:password@wallet:8332');
 const txRepository = new TxRepository();

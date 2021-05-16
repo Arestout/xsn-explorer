@@ -8,6 +8,7 @@ function validateEnv() {
     POSTGRES_PASSWORD: str(),
     POSTGRES_HOST: str(),
     POSTGRES_DB: str(),
+    RABBITMQ_HOST: str(),
   });
 }
 
